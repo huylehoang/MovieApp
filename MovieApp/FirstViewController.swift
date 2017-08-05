@@ -7,18 +7,19 @@
 //
 
 import UIKit
+import AFNetworking
 
-class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, Delegate {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var names = ["The Revenant","The Hateful Eight","THe Big Short"]
+    var data = DataModel()
     
-    var contents = ["hadjfhklasjdfhkljsdhfksjahdfkakjshdfkjahsdfkjhaskldfjhaksldhfaklsdhfklasfhlakjflkajsflkajsflkasjflajsflkjsfljalsfjalksfjlasjflasjflkjsalfjalskjghkljashgkjahfgkjhakfjghkghkashgkahsdkgahskdghaksgdhkashdgkajshdgkjashdgkjahsdkgjhaksjghakjsdhgkjashdgkjahsdgkjahsdkgjhaksldghaklghdkalsdhgkashdgkakgdh",
-                   "jasdlfjooqwejoiprjwqfopijoqpwijfoiqjweofijqopiejfoqpjfojlnznlcxvnlznzlncvlnhsdofiuyopqwuprejlknxcljvkjhxofqwhogihosiagjoisajfoiiqnewiocmoinqronvqoiwjoiqmweoijfoiqjwiofjqwoifheoiqhewfoihqwoiefhqowiefhoqihwfeoiqwhfoihqwoeifhqoiefhqoiwehfoiqhfoqfh",
-                   "jasdfkjhaslkjdfhkajlsdhfkljahsdkfjlhaskdjfhkajsdhfkljhkahjsjkdfhaskaksjhdfkashfdhgoihsdoifgjsdoifgjoisdjfgoisjdfgoijsdogijsdogjosdjfgosdjfgoisdjgfosdjogfjsdoifgjsdoijgiosdjgfoisdjfogijsdiogfjsdopgjfosdijgoisdjgfoisdjfgoijsdfoigjdfoivdjoijfoiajfoijsodifjaosjfoapsjfdoasjdfoiajsdofjsaofpjdaosijfoiajfoisdjfoiajsdfoijasofijasdofijasoidfj"]
+    var names:[String] = []
     
-    var images = [UIImage(named: "TheRevenant"),UIImage(named: "TheHatefulEight"),UIImage(named: "TheBigShort")]
+    var contents:[String] = []
+    
+    var imgURLArray:[String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,8 +27,24 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.delegate = self
         createSearchBar()
         
-        
-        
+        data.delegate = self
+        data.fetchDataMovie()
+
+    }
+    
+    func didReceiveDataNames(dataNames: [String]) {
+        self.names = dataNames
+        self.tableView.reloadData()
+    }
+    
+    func didReceiveDataContens(dataContents: [String]) {
+        self.contents = dataContents
+        self.tableView.reloadData()
+    }
+    
+    func didReceiveDataImages(dataImages: [String]) {
+        self.imgURLArray = dataImages
+        self.tableView.reloadData()
     }
     
     func createSearchBar() {
@@ -46,16 +63,23 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return self.names.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell") as! FirstTableViewCell
         
-        cell.videoThumnailImageView.image = images[indexPath.row]
+
         cell.videoTitle.text = names[indexPath.row]
         cell.videoContent.text = contents[indexPath.row]
+
         
+        let imgURL = NSURL(string: imgURLArray[indexPath.row])
+        
+        if imgURL != nil {
+            let data = NSData(contentsOf: (imgURL as? URL)!)
+            cell.videoThumnailImageView.image = UIImage(data: data as! Data)
+        }
         return cell
          
     }
