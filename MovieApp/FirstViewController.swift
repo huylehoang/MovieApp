@@ -9,72 +9,99 @@
 import UIKit
 import AFNetworking
 
-class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate, Delegate {
+class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating, Delegate {
 
     @IBOutlet weak var tableView: UITableView!
     
     var data = DataModel()
     
-    var names:[String] = []
+//    var names:[String] = []
+//    
+//    var contents:[String] = []
+//    
+//    var imgURLArray:[String] = []
     
-    var contents:[String] = []
+    var videos:[Video] = []
     
-    var imgURLArray:[String] = []
+    let searchController = UISearchController(searchResultsController: nil)
     
+    var filteredArray:[Video] = []
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        createSearchBar()
+
         
         data.delegate = self
         data.fetchDataMovie()
-
-    }
-    
-    func didReceiveDataNames(dataNames: [String]) {
-        self.names = dataNames
-        self.tableView.reloadData()
-    }
-    
-    func didReceiveDataContens(dataContents: [String]) {
-        self.contents = dataContents
-        self.tableView.reloadData()
-    }
-    
-    func didReceiveDataImages(dataImages: [String]) {
-        self.imgURLArray = dataImages
-        self.tableView.reloadData()
-    }
-    
-    func createSearchBar() {
-        let searchBar = UISearchBar()
-        searchBar.showsCancelButton = false
-        searchBar.placeholder = "Search"
-        searchBar.delegate = self
         
-        self.navigationItem.titleView = searchBar
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        searchController.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+        navigationItem.titleView = searchController.searchBar
+
     }
     
-
+    func filterContentForSearchText (searchText: String) {
+        filteredArray = videos.filter({ (video) -> Bool in
+            return video.name.contains(searchText)
+        })
+        
+        self.tableView.reloadData()
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchText: searchController.searchBar.text!)
+    }
+    
+    
+//    func didReceiveDataNames(dataNames: [String]) {
+//        self.names = dataNames
+//        self.tableView.reloadData()
+//    }
+//    
+//    func didReceiveDataContens(dataContents: [String]) {
+//        self.contents = dataContents
+//        self.tableView.reloadData()
+//    }
+//    
+//    func didReceiveDataImages(dataImages: [String]) {
+//        self.imgURLArray = dataImages
+//        self.tableView.reloadData()
+//    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    func didReceiveData(data: [Video]) {
+        self.videos = data
+        self.tableView.reloadData()
+    }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.names.count
+        if searchController.isActive && searchController.searchBar.text != ""  {
+            return self.filteredArray.count
+        } else {
+            return self.videos.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell") as! FirstTableViewCell
         
-
-        cell.videoTitle.text = names[indexPath.row]
-        cell.videoContent.text = contents[indexPath.row]
+        if searchController.isActive && searchController.searchBar.text != "" {
+            cell.videoTitle.text = filteredArray[indexPath.row].name
+        } else {
+            cell.videoTitle.text = self.videos[indexPath.row].name
+        }
+        cell.videoContent.text = self.videos[indexPath.row].content
 
         
-        let imgURL = NSURL(string: imgURLArray[indexPath.row])
+        let imgURL = NSURL(string: self.videos[indexPath.row].imgURL)
         
         if imgURL != nil {
             let data = NSData(contentsOf: (imgURL as? URL)!)
