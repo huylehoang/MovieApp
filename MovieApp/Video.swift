@@ -12,4 +12,6 @@ struct Video {
     var name : String!
     var content : String!
     var imgURL : String!
+    var popularity : Int!
+    var releaseDate: String!
 }

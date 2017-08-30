@@ -15,12 +15,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     var data = DataModel()
     
-//    var names:[String] = []
-//    
-//    var contents:[String] = []
-//    
-//    var imgURLArray:[String] = []
-    
     var videos:[Video] = []
     
     let searchController = UISearchController(searchResultsController: nil)
@@ -39,14 +33,13 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
-        definesPresentationContext = true
         navigationItem.titleView = searchController.searchBar
 
     }
     
     func filterContentForSearchText (searchText: String) {
         filteredArray = videos.filter({ (video) -> Bool in
-            return video.name.contains(searchText)
+            return video.name.lowercased().contains(searchText.lowercased())
         })
         
         self.tableView.reloadData()
@@ -55,22 +48,6 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchText: searchController.searchBar.text!)
     }
-    
-    
-//    func didReceiveDataNames(dataNames: [String]) {
-//        self.names = dataNames
-//        self.tableView.reloadData()
-//    }
-//    
-//    func didReceiveDataContens(dataContents: [String]) {
-//        self.contents = dataContents
-//        self.tableView.reloadData()
-//    }
-//    
-//    func didReceiveDataImages(dataImages: [String]) {
-//        self.imgURLArray = dataImages
-//        self.tableView.reloadData()
-//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -109,6 +86,19 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
         return cell
          
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "moveToSecondVC", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "moveToSecondVC" {
+            let destination = segue.destination as! SecondViewController
+            let indexPath = tableView.indexPathForSelectedRow!
+            
+            destination.video = self.videos[indexPath.row]
+        }
     }
 }
 

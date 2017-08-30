@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		10033F5E1F25ECF6009771F6 /* DataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10033F5D1F25ECF6009771F6 /* DataModel.swift */; };
+		105DC8BF1F4DEA6400A83951 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105DC8BE1F4DEA6400A83951 /* SecondViewController.swift */; };
 		1095A4EB1F43A01C00830211 /* Video.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1095A4EA1F43A01C00830211 /* Video.swift */; };
 		10A67B5A1F101C700015E234 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A67B591F101C700015E234 /* AppDelegate.swift */; };
 		10A67B5C1F101C700015E234 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A67B5B1F101C700015E234 /* FirstViewController.swift */; };
@@ -42,6 +43,7 @@
 /* Begin PBXFileReference section */
 		0266417668FD9020948BDEB8 /* Pods_MovieAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MovieAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		10033F5D1F25ECF6009771F6 /* DataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataModel.swift; sourceTree = "<group>"; };
+		105DC8BE1F4DEA6400A83951 /* SecondViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		1095A4EA1F43A01C00830211 /* Video.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Video.swift; sourceTree = "<group>"; };
 		10A67B561F101C700015E234 /* MovieApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		10A67B591F101C700015E234 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -129,6 +131,7 @@
 				10A67B871F1021C00015E234 /* FirstTableViewCell.swift */,
 				10033F5D1F25ECF6009771F6 /* DataModel.swift */,
 				1095A4EA1F43A01C00830211 /* Video.swift */,
+				105DC8BE1F4DEA6400A83951 /* SecondViewController.swift */,
 			);
 			path = MovieApp;
 			sourceTree = "<group>";
@@ -455,6 +458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				105DC8BF1F4DEA6400A83951 /* SecondViewController.swift in Sources */,
 				10A67B881F1021C00015E234 /* FirstTableViewCell.swift in Sources */,
 				10033F5E1F25ECF6009771F6 /* DataModel.swift in Sources */,
 				10A67B5C1F101C700015E234 /* FirstViewController.swift in Sources */,

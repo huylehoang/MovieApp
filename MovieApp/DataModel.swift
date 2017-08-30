@@ -11,9 +11,6 @@ import UIKit
 import AFNetworking
 
 protocol Delegate: class {
-//    func didReceiveDataNames(dataNames: [String])
-//    func didReceiveDataContens(dataContents: [String])
-//    func didReceiveDataImages(dataImages: [String])
     func didReceiveData(data: [Video])
 }
 
@@ -22,12 +19,6 @@ class DataModel {
     var delegate: Delegate?
     
     func fetchDataMovie() {
-        
-//        var names:[String] = []
-//        
-//        var contents:[String] = []
-//        
-//        var images:[String] = []
         
         var videos:[Video] = []
         
@@ -52,32 +43,23 @@ class DataModel {
                                        
                                         if (responseDictionary["results"] as? [[String:AnyObject]]) != nil {
                                             let results = responseDictionary["results"] as? [[String:AnyObject]]
-//                                            var newNames:[String] = []
-//                                            var newContents:[String] = []
-//                                            var newImages:[String] = []
                                             
                                             var newVideos = [Video]()
 
                                             for result in results! {
-//                                                newNames.append(result["original_title"]! as! String)
-//                                                newContents.append(result["overview"]! as! String)
-//                                                newImages.append("http://image.tmdb.org/t/p/w500" + "\(result["backdrop_path"]!)")
+
                                                 let name = result["original_title"]! as! String
                                                 let content = result["overview"]! as! String
                                                 let imgURL = "http://image.tmdb.org/t/p/w500" + "\(result["backdrop_path"]!)"
-                                                newVideos.append(Video(name: name, content: content, imgURL: imgURL))
+                                                let popularity = result["popularity"]! as! Int
+                                                let releaseDate = result["release_date"]! as! String
+                                                newVideos.append(Video(name: name, content: content, imgURL: imgURL, popularity: popularity, releaseDate: releaseDate))
                                             }
-//                                            names = newNames
-//                                            contents = newContents
-//                                            images = newImages
                                             
                                             videos = newVideos
                                             
                                             self.delegate?.didReceiveData(data: videos)
                                             
-//                                            self.delegate?.didReceiveDataNames(dataNames: names)
-//                                            self.delegate?.didReceiveDataContens(dataContents: contents)
-//                                            self.delegate?.didReceiveDataImages(dataImages: images)
                                         }
                                     }
                                 }
