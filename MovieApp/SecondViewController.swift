@@ -25,6 +25,7 @@ class SecondViewController: UIViewController {
         
         let popularity = video.popularity
         let popularityString = String(describing: popularity!)
+
         
         videoTitle.text = video.name
         videoContent.text = video.content
@@ -36,6 +37,10 @@ class SecondViewController: UIViewController {
             let data = NSData(contentsOf: (imgURL as? URL)!)
             videoImage.image = UIImage(data: data as! Data)
         }
+        
+        let videoContentHeight = videoContent.optimalHeight
+        videoContent.frame = CGRect(x: videoContent.frame.origin.x, y: videoContent.frame.origin.y, width: videoContent.frame.width, height: videoContentHeight)
+        videoContent.numberOfLines = 0
         
     }
 
