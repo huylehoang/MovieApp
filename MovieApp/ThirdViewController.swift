@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating, Delegate {
+class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating, Delegate1 {
 
     @IBOutlet weak var tableView: UITableView!
     
-    var data = DataModel()
+    var data = DataModel_Rated()
     
     var videos:[Video] = []
     
@@ -26,7 +26,7 @@ class ThirdViewController: UIViewController, UITableViewDataSource, UITableViewD
         tableView.delegate = self
         
         
-        data.delegate = self
+        data.delegate1 = self
         data.fetchDataMovie()
         
         searchController.searchResultsUpdater = self

@@ -41,7 +41,6 @@ class SecondViewController: UIViewController {
         let videoContentHeight = videoContent.optimalHeight
         videoContent.frame = CGRect(x: videoContent.frame.origin.x, y: videoContent.frame.origin.y, width: videoContent.frame.width, height: videoContentHeight)
         videoContent.numberOfLines = 0
-        
     }
 
     override func didReceiveMemoryWarning() {
