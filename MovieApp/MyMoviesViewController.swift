@@ -9,7 +9,7 @@
 import UIKit
 import AFNetworking
 
-class FirstViewController: UIViewController, UITableViewDataSource, UITableViewDelegate,UISearchResultsUpdating, Delegate {
+class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegate{
 
     @IBOutlet weak var tableView: UITableView!
     
@@ -20,21 +20,23 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     let searchController = UISearchController(searchResultsController: nil)
     
     var filteredArray:[Video] = []
-        
+    
+    var endpoint: String!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-
         
         data.delegate = self
+        data.endpoint = endpoint
         data.fetchDataMovie()
         
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         navigationItem.titleView = searchController.searchBar
-
+        
     }
     
     func filterContentForSearchText (searchText: String) {
@@ -55,10 +57,28 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func didReceiveData(data: [Video]) {
-        self.videos = data
+        self.videos = data 
         self.tableView.reloadData()
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "moveToSecondVC", sender: self)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "moveToSecondVC" {
+            let destination = segue.destination as! MovieDetailViewController
+            let indexPath = tableView.indexPathForSelectedRow!
+            
+            destination.video = self.videos[indexPath.row]
+        }
+    }
 
+}
+
+extension MyMoviesViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive && searchController.searchBar.text != ""  {
             return self.filteredArray.count
@@ -76,7 +96,7 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.videoTitle.text = self.videos[indexPath.row].name
         }
         cell.videoContent.text = self.videos[indexPath.row].content
-
+        
         
         let imgURL = NSURL(string: self.videos[indexPath.row].imgURL)
         
@@ -85,21 +105,8 @@ class FirstViewController: UIViewController, UITableViewDataSource, UITableViewD
             cell.videoThumnailImageView.image = UIImage(data: data as! Data)
         }
         return cell
-         
+        
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "moveToSecondVC", sender: self)
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "moveToSecondVC" {
-            let destination = segue.destination as! SecondViewController
-            let indexPath = tableView.indexPathForSelectedRow!
-            
-            destination.video = self.videos[indexPath.row]
-        }
-    }
-}   
+}
 

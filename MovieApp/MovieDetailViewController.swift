@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class MovieDetailViewController: UIViewController {
 
     @IBOutlet var gestureRecognizer: UIPanGestureRecognizer!
     @IBOutlet weak var dragView: UIView!

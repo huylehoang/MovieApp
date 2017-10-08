@@ -14,16 +14,18 @@ protocol Delegate: class {
     func didReceiveData(data: [Video])
 }
 
-class DataModel {
+class DataModel{
     
     var delegate: Delegate?
+    
+    var endpoint: String!
     
     func fetchDataMovie() {
         
         var videos:[Video] = []
         
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let url = URL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = URLRequest(
             url: url!,
             cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringLocalCacheData,
@@ -53,6 +55,7 @@ class DataModel {
                                                 let imgURL = "http://image.tmdb.org/t/p/w500" + "\(result["backdrop_path"]!)"
                                                 let popularity = result["popularity"]! as! Int
                                                 let releaseDate = result["release_date"]! as! String
+                                                
                                                 newVideos.append(Video(name: name, content: content, imgURL: imgURL, popularity: popularity, releaseDate: releaseDate))
                                             }
                                             
