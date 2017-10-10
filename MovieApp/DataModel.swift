@@ -18,7 +18,7 @@ class DataModel{
     
     var delegate: Delegate?
     
-    var endpoint: String!
+    var endpoint:String = ""
     
     func fetchDataMovie() {
         

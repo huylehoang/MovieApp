@@ -21,7 +21,7 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
     
     var filteredArray:[Video] = []
     
-    var endpoint: String!
+    var endpoint:String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +29,7 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
         tableView.delegate = self
         
         data.delegate = self
-        data.endpoint = endpoint
+        data.endpoint = self.endpoint
         data.fetchDataMovie()
         
         searchController.searchResultsUpdater = self
