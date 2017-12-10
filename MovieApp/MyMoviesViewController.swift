@@ -57,7 +57,8 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
     }
     
     func didReceiveData(data: [Video]) {
-        self.videos = data 
+        self.videos = data
+//        print(videos)
         self.tableView.reloadData()
     }
     
