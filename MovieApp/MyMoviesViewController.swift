@@ -8,6 +8,8 @@
 
 import UIKit
 import AFNetworking
+import Alamofire
+import AlamofireImage
 
 class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegate{
 
@@ -25,6 +27,7 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.dataSource = self
         tableView.delegate = self
         
@@ -36,14 +39,12 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
         navigationItem.titleView = searchController.searchBar
-        
     }
     
     func filterContentForSearchText (searchText: String) {
         filteredArray = videos.filter({ (video) -> Bool in
             return video.name.lowercased().contains(searchText.lowercased())
         })
-        
         self.tableView.reloadData()
     }
     
@@ -58,7 +59,6 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating, Delegat
     
     func didReceiveData(data: [Video]) {
         self.videos = data
-//        print(videos)
         self.tableView.reloadData()
     }
     
@@ -93,21 +93,31 @@ extension MyMoviesViewController: UITableViewDataSource, UITableViewDelegate {
         
         if searchController.isActive && searchController.searchBar.text != "" {
             cell.videoTitle.text = filteredArray[indexPath.row].name
+            cell.videoContent.text = filteredArray[indexPath.row].content
+            Alamofire.request(filteredArray[indexPath.row].imgURL).responseImage { response in
+                
+                if let image = response.result.value {
+                    cell.videoThumnailImageView.image = image
+                }
+            }
+
         } else {
             cell.videoTitle.text = self.videos[indexPath.row].name
+            cell.videoContent.text = self.videos[indexPath.row].content
+            Alamofire.request(self.videos[indexPath.row].imgURL).responseImage { response in
+                
+                if let image = response.result.value {
+                    cell.videoThumnailImageView.image = image
+                }
+            }
         }
-        cell.videoContent.text = self.videos[indexPath.row].content
-        
-        
-        let imgURL = NSURL(string: self.videos[indexPath.row].imgURL)
-        
-        if imgURL != nil {
-            let data = NSData(contentsOf: (imgURL as? URL)!)
-            cell.videoThumnailImageView.image = UIImage(data: data as! Data)
-        }
+//        let imgURL = NSURL(string: self.videos[indexPath.row].imgURL)
+//
+//        if imgURL != nil {
+//            let data = NSData(contentsOf: (imgURL as? URL)!)
+//            cell.videoThumnailImageView.image = UIImage(data: data as! Data)
+//        }
         return cell
-        
     }
-    
 }
 

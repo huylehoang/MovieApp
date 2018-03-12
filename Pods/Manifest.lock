@@ -14,13 +14,20 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
+  - Alamofire (4.7.0)
+  - AlamofireImage (3.3.0):
+    - Alamofire (~> 4.5)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
+  - Alamofire (~> 4.7.0)
+  - AlamofireImage (~> 3.3.0)
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  Alamofire: 907e0a98eb68cdb7f9d1f541a563d6ac5dc77b25
+  AlamofireImage: 2e784dc5d00f04903a52c1d169181469c805c3df
 
-PODFILE CHECKSUM: cc5e8ccb03e02ca13592348143bdbdea88fe0200
+PODFILE CHECKSUM: f88f7f364d41a39fbb9eb6537fc7a0ad0f16ff43
 
-COCOAPODS: 1.2.1
+COCOAPODS: 1.4.0

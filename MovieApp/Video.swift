@@ -12,10 +12,10 @@ struct Video {
     var name : String!
     var content : String!
     var imgURL : String!
-    var popularity : Int!
+    var popularity : Float!
     var releaseDate: String!
     
-    init(name: String, content: String, imgURL: String, popularity: Int, releaseDate: String) {
+    init(name: String, content: String, imgURL: String, popularity: Float, releaseDate: String) {
         self.name = name
         self.content = content
         self.imgURL = imgURL

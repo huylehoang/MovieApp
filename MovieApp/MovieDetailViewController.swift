@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class MovieDetailViewController: UIViewController {
 
@@ -30,11 +31,17 @@ class MovieDetailViewController: UIViewController {
         videoContent.text = video.content
         videoReleaseDate.text = video.releaseDate
         videoPopularity.text = popularityString + "%"
-        let imgURL = NSURL(string: video.imgURL)
-        
-        if imgURL != nil {
-            let data = NSData(contentsOf: (imgURL as? URL)!)
-            videoImage.image = UIImage(data: data as! Data)
+//        let imgURL = NSURL(string: video.imgURL)
+//        
+//        if imgURL != nil {
+//            let data = NSData(contentsOf: (imgURL as? URL)!)
+//            videoImage.image = UIImage(data: data as! Data)
+//        }
+        Alamofire.request(self.video.imgURL).responseImage { response in
+            
+            if let image = response.result.value {
+                self.videoImage.image = image
+            }
         }
 
     }
