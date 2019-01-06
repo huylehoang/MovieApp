@@ -11,7 +11,6 @@ import Alamofire
 
 class MovieDetailViewController: UIViewController {
 
-    @IBOutlet var gestureRecognizer: UIPanGestureRecognizer!
     @IBOutlet weak var videoContent: UILabel!
     @IBOutlet weak var videoPopularity: UILabel!
     @IBOutlet weak var videoReleaseDate: UILabel!
