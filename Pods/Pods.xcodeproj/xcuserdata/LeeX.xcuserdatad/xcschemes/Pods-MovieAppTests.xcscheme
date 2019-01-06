@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9151B84C6D276AD6757D72FA49C47C71"
+               BlueprintIdentifier = "F17ADA70A5D0B63BCDB08153920DE12A"
                BuildableName = "Pods_MovieAppTests.framework"
                BlueprintName = "Pods-MovieAppTests"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9151B84C6D276AD6757D72FA49C47C71"
+            BlueprintIdentifier = "F17ADA70A5D0B63BCDB08153920DE12A"
             BuildableName = "Pods_MovieAppTests.framework"
             BlueprintName = "Pods-MovieAppTests"
             ReferencedContainer = "container:Pods.xcodeproj">

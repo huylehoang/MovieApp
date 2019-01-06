@@ -18,37 +18,17 @@ class MovieDetailViewController: UIViewController {
     @IBOutlet weak var videoTitle: UILabel!
     @IBOutlet weak var videoImage: UIImageView!
     
-    var video: Video!
+    var video: SelectedItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let popularity = video.popularity
-        let popularityString = String(describing: popularity!)
-
-        
-        videoTitle.text = video.name
-        videoContent.text = video.content
-        videoReleaseDate.text = video.releaseDate
-        videoPopularity.text = popularityString + "%"
-//        let imgURL = NSURL(string: video.imgURL)
-//        
-//        if imgURL != nil {
-//            let data = NSData(contentsOf: (imgURL as? URL)!)
-//            videoImage.image = UIImage(data: data as! Data)
-//        }
-        Alamofire.request(self.video.imgURL).responseImage { response in
-            
-            if let image = response.result.value {
-                self.videoImage.image = image
-            }
+        if let video = self.video {
+            videoTitle.text = video.name
+            videoContent.text = video.content
+            videoReleaseDate.text = video.releaseDate
+            videoPopularity.text = video.popularity + "%"
+            videoImage.image = video.poster
         }
-
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        
-    }
-
 }

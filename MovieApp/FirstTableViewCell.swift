@@ -25,4 +25,13 @@ class FirstTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 
+    func binding(title: String, content: String, thumbnailUrl: String) {
+        self.videoTitle.text = title
+        self.videoContent.text = content
+        let getImageContent = GetImageCommand()
+        getImageContent.execute(imgUrl: thumbnailUrl) { [weak self] (image) in
+            guard let strongSelf = self else { return }
+            strongSelf.videoThumnailImageView.image = image
+        }
+    }
 }
