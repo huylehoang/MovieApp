@@ -40,7 +40,7 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating {
     }
     
     func filterContentForSearchText (searchText: String) {
-        data.filterVideos(with: searchText) {
+        data.filterVideos(with: searchText) { [unowned self] in
             self.tableView.reloadData()
         }
     }
