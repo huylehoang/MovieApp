@@ -58,7 +58,7 @@ class DataViewModel {
     }
     
     public func getItemBy(_ index: Int) -> ListItem? {
-        return (index < self.listCount) ? items[index] : nil
+        return checkIndexIsInRange(index, with: self.listCount) ? items[index] : nil
     }
     
     public func selectVideo(at index: Int, completion: (()->())?) {
