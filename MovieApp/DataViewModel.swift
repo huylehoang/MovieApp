@@ -10,12 +10,10 @@ import Foundation
 import UIKit
 
 class DataViewModel {
-
-    private var videos = [Video]()
-    private var filteredVideos = [Video]()
+    
     private var items = [ListItem]()
     private var selectedVideo: SelectedItem!
-    private var isSearching = false
+    private var movieList = MovieListBuilder()
     
     public func setEndpoint(_ endpoint: String, completion: @escaping (()->())) {
         fetchData(with: endpoint) { [weak self] in
@@ -30,27 +28,31 @@ class DataViewModel {
             let fetchProxy = FetchMovieProxy()
             fetchProxy.fetchDataMovie(with: endpoint) { [weak self] (data) in
                 guard let strongSelf = self else { return }
-                strongSelf.videos = data.map{ $0 }
+                let newData = data.map{ $0 }
+                strongSelf.movieList.setOrigin(newData)
                 completion()
             }
         }
     }
     
     public func filterVideos(with filter: String, completion: @escaping (()->())) {
-        let filterCommand = FilterVideoCommand(videos: self.videos)
-        self.isSearching = (filter == "") ? false : true
-        filteredVideos = filterCommand.execute(with: filter)
-        getMovieListItem()
+        search(with: filter)
         completion()
+    }
+    
+    private func search(with text: String) {
+        let filterCommand = FilterVideoCommand(videos: self.movieList.buildOrigin())
+        self.movieList.setIsSearching((text == "") ? false : true)
+        self.movieList.setFiltered(filterCommand.execute(with: text))
+        getMovieListItem()
     }
     
     public func getMovieListCount() -> Int {
         return self.items.count
     }
-
+    
     private func getMovieListItem() {
-        let movieList = MovieList(origin: self.videos, filtered: self.filteredVideos)
-        MovieListBridge.getMovieListItem(from: movieList, while: self.isSearching) { [weak self] (items) in
+        MovieListBridge.getMovieListItem(from: self.movieList) { [weak self] (items) in
             guard let strongSelf = self else { return }
             strongSelf.items = items
         }
@@ -61,14 +63,17 @@ class DataViewModel {
     }
     
     public func selectVideo(at index: Int, completion: @escaping (()->())) {
+        selected(at: index) {
+            completion()
+        }
+    }
+    
+    private func selected(at index: Int, completion: @escaping (()->())) {
         if checkIndexIsInRange(index, with: self.items.count) {
-            if let video = videos.filter({ (video) -> Bool in
-                return video.id == items[index].id
-            }).first {
-                Helper.mapSelectedItem(from: video) { (selected) in
-                    self.selectedVideo = selected
-                    completion()
-                }
+            let currentList = self.movieList.getNeedMapList()
+            Helper.mapSelectedItem(from: currentList[index]) { (selected) in
+                self.selectedVideo = selected
+                completion()
             }
         }
     }

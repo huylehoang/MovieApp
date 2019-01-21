@@ -11,7 +11,7 @@ import UIKit
 class Helper {
     static func mapListItem(from videos: [Video]) -> [ListItem] {
         return videos.map({ (video) -> ListItem in
-            return ListItem(id: video.id, name: video.name, content: video.content, imgURL: video.imgURL)
+            return ListItem(name: video.name, content: video.content, imgURL: video.imgURL)
         })
     }
     

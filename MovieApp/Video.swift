@@ -20,7 +20,6 @@ struct Video {
 }
 
 struct ListItem {
-    var id: Int
     var name : String
     var content : String
     var imgURL : String
