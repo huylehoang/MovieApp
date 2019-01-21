@@ -30,6 +30,7 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         searchController.hidesNavigationBarDuringPresentation = false
+        self.definesPresentationContext = true
         navigationItem.titleView = searchController.searchBar
     }
     
