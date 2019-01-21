@@ -11,14 +11,14 @@ import UIKit
 import Alamofire
 
 protocol VideoImageCommand {
-    func execute(imgUrl: String, completion: ((UIImage)->())?)
+    static func execute(imgUrl: String, completion: @escaping ((UIImage)->()))
 }
 
 struct GetImageCommand: VideoImageCommand {
-    func execute(imgUrl: String, completion: ((UIImage) -> ())?) {
+    static func execute(imgUrl: String, completion: @escaping ((UIImage) -> ())) {
         Alamofire.request(imgUrl).responseImage { response in
             if let image = response.result.value {
-                completion?(image)
+                completion(image)
             }
         }
     }

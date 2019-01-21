@@ -13,62 +13,61 @@ class DataViewModel {
 
     private var videos = [Video]()
     private var filteredVideos = [Video]()
-    private var listCount: Int = 0
     private var items = [ListItem]()
     private var selectedVideo: SelectedItem!
     private var isSearching = false
     
-    public func setEndpoint(_ endpoint: String, completion: (()->())? = nil) {
+    public func setEndpoint(_ endpoint: String, completion: @escaping (()->())) {
         fetchData(with: endpoint) { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.getMovieListItem()
-            completion?()
+            completion()
         }
     }
     
-    private func fetchData(with endpoint: String, completion: (()->())?) {
+    private func fetchData(with endpoint: String, completion: @escaping (()->())) {
         if endpoint != "" {
-            ApiClient.shared().fetchDataMovie(with: endpoint) { [weak self] (data) in
+            let fetchProxy = FetchMovieProxy()
+            fetchProxy.fetchDataMovie(with: endpoint) { [weak self] (data) in
                 guard let strongSelf = self else { return }
                 strongSelf.videos = data.map{ $0 }
-                completion?()
+                completion()
             }
-            
         }
     }
     
-    public func filterVideos(with filter: String, completion: (()->())? = nil) {
+    public func filterVideos(with filter: String, completion: @escaping (()->())) {
         let filterCommand = FilterVideoCommand(videos: self.videos)
         self.isSearching = (filter == "") ? false : true
         filteredVideos = filterCommand.execute(with: filter)
         getMovieListItem()
-        completion?()
+        completion()
     }
     
     public func getMovieListCount() -> Int {
-        return self.listCount
+        return self.items.count
     }
 
     private func getMovieListItem() {
-        VideoFactory.getMovieListItem(from: self.videos, and: self.filteredVideos, while: self.isSearching) { [weak self] (items) in
+        let movieList = MovieList(origin: self.videos, filtered: self.filteredVideos)
+        MovieListBridge.getMovieListItem(from: movieList, while: self.isSearching) { [weak self] (items) in
             guard let strongSelf = self else { return }
             strongSelf.items = items
-            strongSelf.listCount = items.count
         }
     }
     
     public func getItemBy(_ index: Int) -> ListItem? {
-        return checkIndexIsInRange(index, with: self.listCount) ? items[index] : nil
+        return checkIndexIsInRange(index, with: self.items.count) ? items[index] : nil
     }
     
-    public func selectVideo(at index: Int, completion: (()->())?) {
-        if checkIndexIsInRange(index, with: listCount) {
+    public func selectVideo(at index: Int, completion: @escaping (()->())) {
+        if checkIndexIsInRange(index, with: self.items.count) {
             if let video = videos.filter({ (video) -> Bool in
                 return video.id == items[index].id
             }).first {
                 Helper.mapSelectedItem(from: video) { (selected) in
                     self.selectedVideo = selected
-                    completion?()
+                    completion()
                 }
             }
         }

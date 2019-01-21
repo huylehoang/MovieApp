@@ -1,5 +1,5 @@
 //
-//  APIClient.swift
+//  APIProxy.swift
 //  MovieApp
 //
 //  Created by LeeX on 1/5/19.
@@ -9,19 +9,11 @@
 import Foundation
 import Alamofire
 
-class ApiClient {
-    private let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-    private let mainImageUrl = "http://image.tmdb.org/t/p/w500"
-    private static var sharedApiClient: ApiClient = {
-        return ApiClient()
-    }()
-    class func shared() -> ApiClient {
-        return sharedApiClient
-    }
-    
-    func fetchDataMovie(with endpoint: String, completion: (([Video]) ->())?) {
-        Alamofire.request("https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)", method: .get).responseJSON { [weak self] response in
-            guard let strongSelf = self else { return }
+struct FetchMovieProxy {
+    public func fetchDataMovie(with endpoint: String, completion: @escaping (([Video]) ->())) {
+        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
+        let mainImageUrl = "http://image.tmdb.org/t/p/w500"
+        Alamofire.request("https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)", method: .get).responseJSON { response in
             if let result = response.result.value {
                 if let JSON = result as? [String:AnyObject] {
                     if let results = JSON["results"] as? [[String:AnyObject]] {
@@ -35,12 +27,12 @@ class ApiClient {
                                 , let releaseDate = result["release_date"] as? String
                                 , let posterPath = result["poster_path"] as? String
                             {
-                                let imgURL = strongSelf.mainImageUrl + backdropPath
-                                let poster = strongSelf.mainImageUrl + posterPath
+                                let imgURL = mainImageUrl + backdropPath
+                                let poster = mainImageUrl + posterPath
                                 let popularityNum = Int(popularity * 10)
                                 videos.append(Video(id: id, name: name, content: content, imgURL: imgURL, popularity: popularityNum, releaseDate: releaseDate, poster: poster))
                             }
-                            completion?(videos)
+                            completion(videos)
                         }
                     }
                 }
