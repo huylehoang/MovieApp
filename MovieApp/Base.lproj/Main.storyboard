@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="y8l-n2-6sH">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="y8l-n2-6sH">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,7 +60,6 @@
                                                 <constraint firstItem="5MH-Mh-Q2T" firstAttribute="top" secondItem="Vq8-sB-Nk0" secondAttribute="bottom" constant="8" id="Sjz-uv-bnE"/>
                                                 <constraint firstAttribute="trailing" secondItem="5MH-Mh-Q2T" secondAttribute="trailing" constant="4" id="YSe-DZ-7JR"/>
                                                 <constraint firstItem="1Bd-5d-zaU" firstAttribute="centerY" secondItem="U2M-eX-DaQ" secondAttribute="centerY" id="gxe-jM-YVG"/>
-                                                <constraint firstAttribute="trailing" secondItem="1Bd-5d-zaU" secondAttribute="trailing" constant="250" id="phy-D2-9fG"/>
                                                 <constraint firstItem="Vq8-sB-Nk0" firstAttribute="leading" secondItem="1Bd-5d-zaU" secondAttribute="trailing" constant="8" id="sjG-nk-uXR"/>
                                                 <constraint firstItem="Vq8-sB-Nk0" firstAttribute="top" secondItem="1Bd-5d-zaU" secondAttribute="top" id="ukh-Jm-xhH"/>
                                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="5MH-Mh-Q2T" secondAttribute="bottom" constant="10" id="zSC-IO-QGY"/>
@@ -109,9 +108,6 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8id-o2-kip">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="554" id="90z-OM-474"/>
-                                </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bZD-bh-2da" userLabel="Content View">
                                 <rect key="frame" x="20" y="408" width="335" height="200"/>
