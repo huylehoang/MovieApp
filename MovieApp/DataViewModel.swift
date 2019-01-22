@@ -16,10 +16,17 @@ class DataViewModel {
     private var movieList = MovieListBuilder()
     
     public func setEndpoint(_ endpoint: String, completion: @escaping (()->())) {
+        resetSelected()
         fetchData(with: endpoint) { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.getMovieListItem()
             completion()
+        }
+    }
+    
+    private func resetSelected() {
+        if selectedVideo != nil {
+            selectedVideo = nil
         }
     }
     
@@ -81,8 +88,8 @@ class DataViewModel {
     }
     
     private func selected(at index: Int, completion: @escaping (()->())) {
-        if checkIndexIsInRange(index, with: self.getItemsCount()) {
-            let currentList = self.movieList.getNeedMapList()
+        let currentList = self.movieList.getNeedMapList()
+        if checkIndexIsInRange(index, with: currentList.count) {
             Helper.mapSelectedItem(from: currentList[index]) { (selected) in
                 self.selectedVideo = selected
                 completion()
