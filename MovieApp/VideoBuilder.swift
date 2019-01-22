@@ -25,9 +25,8 @@ protocol MovieListBuilderProtocol {
     func buildOrigin() -> [Video]
     func buildFiltered() -> [Video]
     func isSearching() -> Bool
-    func setFiltered(_ filtered: [Video])
+    func setFiltered(_ filtered: [Video], while searching: Bool)
     func setOrigin(_ origin: [Video])
-    func setIsSearching(_ isSearching: Bool)
     func getNeedMapList() -> [Video]
 }
 
@@ -68,15 +67,12 @@ class MovieListBuilder : MovieListBuilderProtocol {
         return results
     }
     
-    func setIsSearching(_ isSearching: Bool) {
-        self.movieList.isSearching = isSearching
-    }
-    
     func setOrigin(_ origin: [Video]) {
         self.movieList.origin = origin
     }
     
-    func setFiltered(_ filtered: [Video]) {
+    func setFiltered(_ filtered: [Video], while searching: Bool) {
         self.movieList.filtered = filtered
+        self.movieList.isSearching = searching
     }
 }

@@ -42,8 +42,8 @@ class DataViewModel {
     
     private func search(with text: String) {
         let filterCommand = FilterVideoCommand(videos: self.movieList.buildOrigin())
-        self.movieList.setIsSearching((text == "") ? false : true)
-        self.movieList.setFiltered(filterCommand.execute(with: text))
+        self.movieList.setFiltered(filterCommand.execute(with: text),
+                                   while: (text == "") ? false : true)
         getMovieListItem()
     }
     
