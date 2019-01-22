@@ -35,16 +35,24 @@ class DataViewModel {
         }
     }
     
+    private func getOriginVideos() -> [Video] {
+        return self.movieList.buildOrigin()
+    }
+    
     public func filterVideos(with filter: String, completion: @escaping (()->())) {
         search(with: filter)
         completion()
     }
     
     private func search(with text: String) {
-        let filterCommand = FilterVideoCommand(videos: self.movieList.buildOrigin())
+        let filterCommand = FilterVideoCommand(videos: self.getOriginVideos())
         self.movieList.setFiltered(filterCommand.execute(with: text),
-                                   while: (text == "") ? false : true)
+                                   while: isSearchingVideos(text))
         getMovieListItem()
+    }
+    
+    private func isSearchingVideos(_ text: String) -> Bool {
+        return (text == "") ? false : true
     }
     
     public func getMovieListCount() -> Int {
@@ -58,8 +66,12 @@ class DataViewModel {
         }
     }
     
+    private func getItemsCount() -> Int {
+        return self.items.count
+    }
+    
     public func getItemBy(_ index: Int) -> ListItem? {
-        return checkIndexIsInRange(index, with: self.items.count) ? items[index] : nil
+        return checkIndexIsInRange(index, with: self.getItemsCount()) ? items[index] : nil
     }
     
     public func selectVideo(at index: Int, completion: @escaping (()->())) {
@@ -69,7 +81,7 @@ class DataViewModel {
     }
     
     private func selected(at index: Int, completion: @escaping (()->())) {
-        if checkIndexIsInRange(index, with: self.items.count) {
+        if checkIndexIsInRange(index, with: self.getItemsCount()) {
             let currentList = self.movieList.getNeedMapList()
             Helper.mapSelectedItem(from: currentList[index]) { (selected) in
                 self.selectedVideo = selected
