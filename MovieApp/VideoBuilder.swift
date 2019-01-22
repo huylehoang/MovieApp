@@ -21,6 +21,7 @@ class MovieList: MovieListProtocol {
 }
 
 protocol MovieListBuilderProtocol {
+    var movieList: MovieList {get set}
     func buildOrigin() -> [Video]
     func buildFiltered() -> [Video]
     func isSearching() -> Bool
