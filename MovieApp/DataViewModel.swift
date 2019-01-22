@@ -15,19 +15,20 @@ class DataViewModel {
     private var selectedVideo: SelectedItem!
     private var movieList = MovieListBuilder()
     
-    public func setEndpoint(_ endpoint: String, completion: @escaping (()->())) {
-        resetSelected()
+    public func setEndpoint(_ endpoint: String, completion: @escaping ((Int?)->())) {
         fetchData(with: endpoint) { [weak self] in
             guard let strongSelf = self else { return }
             strongSelf.getMovieListItem()
-            completion()
+            completion(strongSelf.getSelectedIndex())
         }
     }
     
-    private func resetSelected() {
-        if selectedVideo != nil {
-            selectedVideo = nil
-        }
+    private func getSelectedIndex() -> Int? {
+        return MovieListBridge.getSelectedIndex(from: self.movieList, with: self.selectedVideo)
+    }
+    
+    private func getCurrentList() -> [Video] {
+        return self.movieList.getNeedMapList()
     }
     
     private func fetchData(with endpoint: String, completion: @escaping (()->())) {
@@ -73,12 +74,8 @@ class DataViewModel {
         }
     }
     
-    private func getItemsCount() -> Int {
-        return self.items.count
-    }
-    
     public func getItemBy(_ index: Int) -> ListItem? {
-        return checkIndexIsInRange(index, with: self.getItemsCount()) ? items[index] : nil
+        return checkIndexIsInRange(index, with: self.getMovieListCount()) ? items[index] : nil
     }
     
     public func selectVideo(at index: Int, completion: @escaping (()->())) {
@@ -88,10 +85,10 @@ class DataViewModel {
     }
     
     private func selected(at index: Int, completion: @escaping (()->())) {
-        let currentList = self.movieList.getNeedMapList()
+        let currentList = self.getCurrentList()
         if checkIndexIsInRange(index, with: currentList.count) {
-            Helper.mapSelectedItem(from: currentList[index]) { (selected) in
-                self.selectedVideo = selected
+            MovieListBridge.getSelectedItem(from: self.movieList, with: index) { (selectedItem) in
+                self.selectedVideo = selectedItem
                 completion()
             }
         }

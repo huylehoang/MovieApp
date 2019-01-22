@@ -35,8 +35,12 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        data.setEndpoint(self.endpoint) { [unowned self] in
+        data.setEndpoint(self.endpoint) { [unowned self] (selectedIndex) in
             self.tableView.reloadData()
+            if let index = selectedIndex {
+                let indexPath = IndexPath(row: index, section: 0)
+                self.tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+            }
         }
     }
     
@@ -51,9 +55,11 @@ class MyMoviesViewController: UIViewController, UISearchResultsUpdating {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        data.selectVideo(at: indexPath.row) { [unowned self] in
-            self.performSegue(withIdentifier: "moveToSecondVC", sender: self)
-            self.tableView.deselectRow(at: indexPath, animated: true)
+        if let indexPathRow = tableView.indexPathForSelectedRow?.row, indexPathRow == indexPath.row {
+            data.selectVideo(at: indexPathRow) { [unowned self] in
+                self.performSegue(withIdentifier: "moveToSecondVC", sender: self)
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
         }
     }
     

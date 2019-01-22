@@ -26,6 +26,7 @@ struct ListItem {
 }
 
 struct SelectedItem {
+    var id: Int
     var name: String
     var content: String
     var releaseDate: String

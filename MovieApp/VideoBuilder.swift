@@ -30,7 +30,12 @@ protocol MovieListBuilderProtocol {
     func getNeedMapList() -> [Video]
 }
 
-class MovieListBuilder : MovieListBuilderProtocol {
+protocol SelectedItemHandlerProtocol {
+    func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int?
+    func getSelected(with index: Int, completion: @escaping ((SelectedItem)->()))
+}
+
+class MovieListBuilder : MovieListBuilderProtocol, SelectedItemHandlerProtocol {
     internal var movieList: MovieList
     
     init() {
@@ -65,6 +70,32 @@ class MovieListBuilder : MovieListBuilderProtocol {
             }
         }
         return results
+    }
+    
+    internal func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int? {
+        if let selected = selectedVideo {
+            let currentList = self.getNeedMapList()
+            if let selectedIndex = currentList.enumerated()
+                .filter({ (index, item) -> Bool in
+                    return item.id == selected.id
+                }).map({ (index, item) -> Int in
+                    return index
+                }).first
+            {
+                return selectedIndex
+            }
+        }
+        return nil
+    }
+    
+    internal func getSelected(with index: Int, completion: @escaping ((SelectedItem)->())) {
+        let currentList = self.getNeedMapList()
+        if index < currentList.count {
+            let selectedVideo = currentList[index]
+            Helper.mapSelectedItem(from: selectedVideo) { (selected) in
+                completion(selected)
+            }
+        }
     }
     
     func setOrigin(_ origin: [Video]) {
