@@ -18,7 +18,7 @@ class Helper {
     static func mapSelectedItem(from selectedVideo: Video, completion: @escaping ((SelectedItem)->())) {
         GetImageCommand.execute(imgUrl: selectedVideo.poster) { (posterImage) in
             let popularity = String(describing: selectedVideo.popularity)
-            let selected = SelectedItem(id: selectedVideo.id, name: selectedVideo.name, content: selectedVideo.content, releaseDate: selectedVideo.releaseDate, popularity: popularity, poster: posterImage)
+            let selected = SelectedItem(name: selectedVideo.name, content: selectedVideo.content, releaseDate: selectedVideo.releaseDate, popularity: popularity, poster: posterImage)
             completion(selected)
         }
     }
