@@ -19,19 +19,17 @@ struct FetchMovieProxy {
                     if let results = JSON["results"] as? [[String:AnyObject]] {
                         var videos:[Video] = []
                         for result in results {
-                            if let id = result["id"] as? Int
-                                , let name = result["original_title"] as? String
-                                , let content = result["overview"] as? String
-                                , let backdropPath = result["backdrop_path"] as? String
-                                , let popularity = result["vote_average"] as? Float
-                                , let releaseDate = result["release_date"] as? String
-                                , let posterPath = result["poster_path"] as? String
-                            {
-                                let imgURL = mainImageUrl + backdropPath
-                                let poster = mainImageUrl + posterPath
-                                let popularityNum = Int(popularity * 10)
-                                videos.append(Video(id: id, name: name, content: content, imgURL: imgURL, popularity: popularityNum, releaseDate: releaseDate, poster: poster))
-                            }
+                            let id = result["id"] as? Int ?? 0
+                            let name = result["original_title"] as? String ?? ""
+                            let content = result["overview"] as? String ?? ""
+                            let backdropPath = result["backdrop_path"] as? String ?? ""
+                            let imgURL = mainImageUrl + backdropPath
+                            let popularity = result["vote_average"] as? Double ?? 0.0
+                            let popularityNum = Int(popularity * 10)
+                            let releaseDate = result["release_date"] as? String ?? ""
+                            let posterPath = result["poster_path"] as? String ?? ""
+                            let poster = mainImageUrl + posterPath
+                            videos.append(Video(id: id, name: name, content: content, imgURL: imgURL, popularity: popularityNum, releaseDate: releaseDate, poster: poster))
                             completion(videos)
                         }
                     }
