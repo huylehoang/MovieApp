@@ -8,102 +8,68 @@
 
 import Foundation
 
-protocol MovieListProtocol {
-    var origin: [Video] {get set}
-    var filtered: [Video] {get set}
-    var isSearching: Bool {get set}
+protocol VideoProtocol {
+    var id: Int {get set}
+    var name : String {get set}
+    var content : String {get set}
+    var imgURL : String {get set}
+    var popularity : Int {get set}
+    var releaseDate: String {get set}
+    var poster: String {get set}
 }
 
-class MovieList: MovieListProtocol {
-    var origin: [Video] = []
-    var filtered: [Video] = []
-    var isSearching: Bool = false
-}
-
-protocol MovieListBuilderProtocol {
-    var movieList: MovieList {get set}
-    func buildOrigin() -> [Video]
-    func buildFiltered() -> [Video]
-    func isSearching() -> Bool
-    func setFiltered(_ filtered: [Video], while searching: Bool)
-    func setOrigin(_ origin: [Video])
-    func getNeedMapList() -> [Video]
-}
-
-protocol SelectedItemHandlerProtocol {
-    func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int?
-    func getSelected(with index: Int, completion: @escaping ((SelectedItem)->()))
-}
-
-class MovieListBuilder : MovieListBuilderProtocol, SelectedItemHandlerProtocol {
-    internal var movieList: MovieList
+struct VideoBuilder: VideoProtocol {
+    var id: Int = 0
+    var name : String = ""
+    var content : String = ""
+    var imgURL : String = ""
+    var popularity : Int = 0
+    var releaseDate: String = ""
+    var poster: String = ""
     
-    init() {
-        self.movieList = MovieList()
-    }
+    private var mainImageURL = "http://image.tmdb.org/t/p/w500"
     
-    func buildOrigin() -> [Video] {
-        return self.movieList.origin
-    }
-    
-    func buildFiltered() -> [Video] {
-        return self.movieList.filtered
-    }
-    
-    func isSearching() -> Bool {
-        return self.movieList.isSearching
-    }
-    
-    func getNeedMapList() -> [Video] {
-        var results = [Video]()
-        let origin = self.buildOrigin()
-        let filtered = self.buildFiltered()
-        if origin.count > 0 {
-            if self.isSearching() == true {
-                if filtered.count > 0 && filtered.count < origin.count {
-                    results = filtered
-                } else if filtered.count == origin.count {
-                    results = origin
-                }
-            } else {
-                results = origin
-            }
-        }
-        return results
-    }
-    
-    internal func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int? {
-        if let selected = selectedVideo {
-            let currentList = self.getNeedMapList()
-            if let selectedIndex = currentList.enumerated()
-                .filter({ (index, item) -> Bool in
-                    return item.id == selected.id
-                }).map({ (index, item) -> Int in
-                    return index
-                }).first
-            {
-                return selectedIndex
-            }
-        }
-        return nil
-    }
-    
-    internal func getSelected(with index: Int, completion: @escaping ((SelectedItem)->())) {
-        let currentList = self.getNeedMapList()
-        if index < currentList.count {
-            let selectedVideo = currentList[index]
-            Helper.mapSelectedItem(from: selectedVideo) { (selected) in
-                completion(selected)
-            }
+    mutating func setId(_ newId: Int?) {
+        if let newId = newId {
+            self.id = newId
         }
     }
     
-    func setOrigin(_ origin: [Video]) {
-        self.movieList.origin = origin
+    mutating func setName(_ newName: String?) {
+        if let newName = newName {
+            self.name = newName
+        }
+    }
+    mutating func setContent(_ newContent: String?) {
+        if let newContent = newContent {
+            self.content = newContent
+        }
+    }
+    mutating func setImgUrl(_ newImgUrl: String?) {
+        if let newImgUrl = newImgUrl {
+            self.imgURL = self.mainImageURL + newImgUrl
+        }
+    }
+    mutating func setPopularity(_ newPopularity: Double?) {
+        if let newPopularity = newPopularity {
+            self.popularity = Int(newPopularity * 10)
+        }
     }
     
-    func setFiltered(_ filtered: [Video], while searching: Bool) {
-        self.movieList.filtered = filtered
-        self.movieList.isSearching = searching
+    mutating func setReleaseDate(_ newReleaseDate: String?) {
+        if let newReleaseDate = newReleaseDate {
+            self.releaseDate = newReleaseDate
+        }
     }
+    
+    mutating func setPoster(_ newPoster: String?) {
+        if let newPoster = newPoster {
+            self.poster = self.mainImageURL + newPoster
+        }
+    }
+    
+    func buildVideo() -> Video {
+        return Video(id: self.id, name: self.name, content: self.content, imgURL: self.imgURL, popularity: self.popularity, releaseDate: self.releaseDate, poster: self.poster)
+    }
+    
 }

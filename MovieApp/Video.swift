@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct Video {
+struct Video: VideoProtocol {
     var id: Int
     var name : String
     var content : String
