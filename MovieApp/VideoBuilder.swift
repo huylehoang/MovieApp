@@ -27,7 +27,9 @@ struct VideoBuilder: VideoProtocol {
     var releaseDate: String = ""
     var poster: String = ""
     
-    private var mainImageURL = "http://image.tmdb.org/t/p/w500"
+    lazy private var mainImageURL : String = {
+        return "http://image.tmdb.org/t/p/w500"
+    }()
     
     mutating func setId(_ newId: Int?) {
         if let newId = newId {

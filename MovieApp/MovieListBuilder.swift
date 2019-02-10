@@ -1,8 +1,9 @@
 //
 //  MovieListBuilder.swift
-//  
+//  MovieApp
 //
-//  Created by Huy Le Hoang on 1/31/19.
+//  Created by LeeX on 2/11/19.
+//  Copyright © 2019 LeeX. All rights reserved.
 //
 
 import Foundation

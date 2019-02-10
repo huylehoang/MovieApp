@@ -10,8 +10,8 @@ import Foundation
 import Alamofire
 
 struct FetchMovieProxy {
+    private let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
     public func fetchDataMovie(with endpoint: String, completion: @escaping (([Video]) ->())) {
-        let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
         Alamofire.request("https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)", method: .get).responseJSON { response in
             if let result = response.result.value {
                 if let JSON = result as? [String:AnyObject] {

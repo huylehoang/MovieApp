@@ -11,10 +11,14 @@ import UIKit
 
 class DataViewModel {
     
-    private var items = [ListItem]()
+    lazy private var items: [ListItem] = {
+        return [ListItem]()
+    }()
+    lazy private var movieList: MovieListBuilder = {
+        return MovieListBuilder()
+    }()
     private var selectedVideo: SelectedItem!
-    private var movieList = MovieListBuilder()
-    
+
     public func setEndpoint(_ endpoint: String, completion: @escaping ((Int?)->())) {
         fetchData(with: endpoint) { [weak self] in
             guard let strongSelf = self else { return }

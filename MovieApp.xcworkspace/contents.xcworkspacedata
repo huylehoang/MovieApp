@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/huylehoang/MovieApp/MovieApp/MovieListBuilder.swift">
-   </FileRef>
-   <FileRef
       location = "group:MovieApp.xcodeproj">
    </FileRef>
    <FileRef
