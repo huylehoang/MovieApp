@@ -8,99 +8,49 @@
 
 import Foundation
 
-protocol MovieListProtocol {
-    var origin: [Video] {get set}
-    var filtered: [Video] {get set}
-    var isSearching: Bool {get set}
-}
-
-class MovieList: MovieListProtocol {
-    var origin: [Video] = []
-    var filtered: [Video] = []
-    var isSearching: Bool = false
-}
-
 protocol MovieListBuilderProtocol {
-    func buildOrigin() -> [Video]
-    func setFiltered(_ filtered: [Video], while searching: Bool)
+    var movieList: MovieListProtocol? {get set}
     func setOrigin(_ origin: [Video])
-    func getNeedMapList() -> [Video]
+    func setFiltered(_ filtered: [Video], while searching: Bool)
+    func getCurrentList() -> [Video]
+    func buildOrigin() -> [Video]
 }
 
-protocol SelectedItemHandlerProtocol {
-    func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int?
-    func getSelected(with index: Int, completion: @escaping ((SelectedItem)->()))
-}
-
-class MovieListBuilder : MovieListBuilderProtocol, SelectedItemHandlerProtocol {
-    private var movieList: MovieList
+class MovieListBuilder : MovieListBuilderProtocol {
+    internal var movieList: MovieListProtocol?
     
-    init() {
-        self.movieList = MovieList()
-    }
-    
-    func buildOrigin() -> [Video] {
-        return self.movieList.origin
-    }
-    
-    private func buildFiltered() -> [Video] {
-        return self.movieList.filtered
-    }
-    
-    private func isSearching() -> Bool {
-        return self.movieList.isSearching
-    }
-    
-    func getNeedMapList() -> [Video] {
-        var results = [Video]()
-        let origin = self.buildOrigin()
-        let filtered = self.buildFiltered()
-        if origin.count > 0 {
-            if self.isSearching() == true {
-                if filtered.count > 0 && filtered.count < origin.count {
-                    results = filtered
-                } else if filtered.count == origin.count {
-                    results = origin
-                }
-            } else {
-                results = origin
-            }
-        }
-        return results
-    }
-    
-    internal func getCurrentSelectedIndex(from selectedVideo: SelectedItem?) -> Int? {
-        if let selected = selectedVideo {
-            let currentList = self.getNeedMapList()
-            if let selectedIndex = currentList.enumerated()
-                .filter({ (index, item) -> Bool in
-                    return item.id == selected.id
-                }).map({ (index, item) -> Int in
-                    return index
-                }).first
-            {
-                return selectedIndex
-            }
-        }
-        return nil
-    }
-    
-    internal func getSelected(with index: Int, completion: @escaping ((SelectedItem)->())) {
-        let currentList = self.getNeedMapList()
-        if index < currentList.count {
-            let selectedVideo = currentList[index]
-            Helper.mapSelectedItem(from: selectedVideo) { (selected) in
-                completion(selected)
-            }
-        }
+    init(movieList: MovieListProtocol) {
+        self.movieList = movieList
     }
     
     func setOrigin(_ origin: [Video]) {
-        self.movieList.origin = origin
+        if self.movieList != nil, origin.count > 0 {
+            self.movieList?.origin = origin
+        }
     }
     
     func setFiltered(_ filtered: [Video], while searching: Bool) {
-        self.movieList.filtered = filtered
-        self.movieList.isSearching = searching
+        if self.movieList != nil {
+            self.movieList?.filtered = filtered
+            self.movieList?.isSearching = searching
+        }
+    }
+    
+    func getCurrentList() -> [Video] {
+        if let list = self.movieList {
+            if list.prepareCurrentList().count > 0 {
+                return list.prepareCurrentList()
+            }
+        }
+        return []
+    }
+    
+    func buildOrigin() -> [Video] {
+        if let list = self.movieList {
+            if list.origin.count > 0 {
+                return list.origin
+            }
+        }
+        return []
     }
 }

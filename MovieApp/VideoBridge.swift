@@ -9,17 +9,22 @@
 import Foundation
 
 struct MovieListBridge {
-    static func getMovieListItem(from list: MovieListBuilder, completion: (([ListItem])->())) {
-        completion(Helper.mapListItem(from: list.getNeedMapList()))
+    static func getMovieListItem(from builder: MovieListBuilderProtocol, completion: (([ListItem])->())) {
+        completion(Helper.mapListItem(from: builder.getCurrentList()))
     }
     
-    static func getSelectedIndex(from list: MovieListBuilder, with selected: SelectedItem?) -> Int? {
-        return list.getCurrentSelectedIndex(from: selected)
+    static func getSelectedIndex(from builder: MovieListBuilderProtocol, with selected: SelectedItem?) -> Int? {
+        if let list = builder.movieList {
+            return list.prepareSelectedIndex(from: selected)
+        }
+        return nil
     }
     
-    static func getSelectedItem(from list: MovieListBuilder, with selectedIndex: Int, completion: @escaping ((SelectedItem)->())) {
-        list.getSelected(with: selectedIndex) { (selected) in
-            completion(selected)
+    static func getSelectedItem(from builder: MovieListBuilderProtocol, with selectedIndex: Int, completion: @escaping ((SelectedItem)->())) {
+        if let list = builder.movieList {
+            list.prepareSelectedItem(with: selectedIndex) { (selected) in
+                completion(selected)
+            }
         }
     }
 }

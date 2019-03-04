@@ -14,8 +14,9 @@ class DataViewModel {
     lazy private var items: [ListItem] = {
         return [ListItem]()
     }()
-    lazy private var movieList: MovieListBuilder = {
-        return MovieListBuilder()
+    private var movieList = MovieList()
+    lazy private var listBuilder: MovieListBuilder = {
+        return MovieListBuilder(movieList: movieList)
     }()
     private var selectedVideo: SelectedItem!
 
@@ -28,11 +29,11 @@ class DataViewModel {
     }
     
     private func getSelectedIndex() -> Int? {
-        return MovieListBridge.getSelectedIndex(from: self.movieList, with: self.selectedVideo)
+        return MovieListBridge.getSelectedIndex(from: self.listBuilder, with: self.selectedVideo)
     }
     
     private func getCurrentList() -> [Video] {
-        return self.movieList.getNeedMapList()
+        return self.listBuilder.getCurrentList()
     }
     
     private func fetchData(with endpoint: String, completion: @escaping (()->())) {
@@ -41,14 +42,14 @@ class DataViewModel {
             fetchProxy.fetchDataMovie(with: endpoint) { [weak self] (data) in
                 guard let strongSelf = self else { return }
                 let newData = data.map{ $0 }
-                strongSelf.movieList.setOrigin(newData)
+                strongSelf.listBuilder.setOrigin(newData)
                 completion()
             }
         }
     }
     
     private func getOriginVideos() -> [Video] {
-        return self.movieList.buildOrigin()
+        return self.listBuilder.buildOrigin()
     }
     
     public func filterVideos(with filter: String, completion: @escaping (()->())) {
@@ -58,7 +59,7 @@ class DataViewModel {
     
     private func search(with text: String) {
         let filterCommand = FilterVideoCommand(videos: self.getOriginVideos())
-        self.movieList.setFiltered(filterCommand.execute(with: text),
+        self.listBuilder.setFiltered(filterCommand.execute(with: text),
                                    while: isSearchingVideos(text))
         getMovieListItem()
     }
@@ -72,7 +73,7 @@ class DataViewModel {
     }
     
     private func getMovieListItem() {
-        MovieListBridge.getMovieListItem(from: self.movieList) { [weak self] (items) in
+        MovieListBridge.getMovieListItem(from: self.listBuilder) { [weak self] (items) in
             guard let strongSelf = self else { return }
             strongSelf.items = items
         }
@@ -91,7 +92,7 @@ class DataViewModel {
     private func selected(at index: Int, completion: @escaping (()->())) {
         let currentList = self.getCurrentList()
         if checkIndexIsInRange(index, with: currentList.count) {
-            MovieListBridge.getSelectedItem(from: self.movieList, with: index) { (selectedItem) in
+            MovieListBridge.getSelectedItem(from: self.listBuilder, with: index) { (selectedItem) in
                 self.selectedVideo = selectedItem
                 completion()
             }
