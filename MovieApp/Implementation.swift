@@ -21,9 +21,15 @@ protocol MovieListProtocol: SelectedItemHandlerProtocol {
 }
 
 class MovieList: MovieListProtocol {
-    internal var origin: [Video] = []
-    internal var filtered: [Video] = []
-    internal var isSearching: Bool = false
+    lazy internal var origin: [Video] = {
+        return [Video]()
+    }()
+    lazy internal var filtered: [Video] = {
+        return [Video]()
+    }()
+    lazy internal var isSearching: Bool = {
+        return false
+    }()
     
     internal func prepareCurrentList() -> [Video] {
         if origin.count > 0 {
